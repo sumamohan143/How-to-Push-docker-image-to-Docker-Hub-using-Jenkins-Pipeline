@@ -1,47 +1,30 @@
-#!/bin/bash
-pipeline{
-
-	agent {label 'docker'}
-
-	environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-	}
-
-	stages {
-	    
-	    /*stage('gitclone') {
-
-			steps {
-				git 'https://github.com/shazforiot/nodeapp_test.git'
-			}
-		}*/
-
-		stage('Build') {
-
-			steps {
-				sh 'sudo docker build -t sumamohan143/nodeapp_test:latest .'
-			}
-		}
-
-		stage('Login') {
-
-			steps {
-				sh 'sudo echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			}
-		}
-
-		stage('Push') {
-
-			steps {
-				sh 'sudo docker push sumamohan143/nodeapp_test:latest'
-			}
-		}
-	}
-
-	post {
-		always {
-			sh 'sudo docker logout'
-		}
-	}
-
+pipeline {
+  agent { label 'docker' }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t sumamohan143/mr-alpine:latest .'
+      }
+    }
+    stage('Scan') {
+      steps {
+        sh 'docker scan sumamohan143/mr-alpine:latest'
+      }
+    }
+    stage('Publish') {
+      steps {
+        sh '''
+          docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW
+          docker push sumamohan143/mr-alpine:latest
+          docker logout
+        '''
+      }
+    }
+  }
 }
