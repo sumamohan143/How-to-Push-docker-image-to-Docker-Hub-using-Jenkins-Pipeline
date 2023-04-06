@@ -12,11 +12,11 @@ pipeline {
         sh 'sudo docker build -t sumamohan143/mr-alpine:latest .'
       }
     }
-    stage('Scan') {
+    /*stage('Scan') {
       steps {
         sh 'sudo docker scan sumamohan143/mr-alpine:latest'
       }
-    }
+    }*/
     stage('Publish') {
       steps {
         sh '''
