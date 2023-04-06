@@ -19,7 +19,7 @@ pipeline{
 		stage('Build') {
 
 			steps {
-				sh 'sudo docker build -t sumamohan143/nodeapp_test:latest .'
+				sh 'sudo docker build -t sumamohan143/nodeapp_test:latest . 2>&1'
 			}
 		}
 
