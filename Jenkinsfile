@@ -9,20 +9,20 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t sumamohan143/mr-alpine:latest .'
+        sh 'sudo docker build -t sumamohan143/mr-alpine:latest .'
       }
     }
     stage('Scan') {
       steps {
-        sh 'docker scan sumamohan143/mr-alpine:latest'
+        sh 'sudo docker scan sumamohan143/mr-alpine:latest'
       }
     }
     stage('Publish') {
       steps {
         sh '''
-          docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW
-          docker push sumamohan143/mr-alpine:latest
-          docker logout
+          sudo docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW
+          sudo docker push sumamohan143/mr-alpine:latest
+          sudo docker logout
         '''
       }
     }
