@@ -3,7 +3,7 @@ FROM node:alpine
 #Install some dependencies
 
 #WORKDIR /usr/app
-COPY ./ /usr/app
+COPY ./ ./
 RUN npm install
 
 # Set up a default command
