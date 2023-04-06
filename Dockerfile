@@ -1,1 +1,1 @@
-FROM node:alpine
+FROM alpine:3.13.5
