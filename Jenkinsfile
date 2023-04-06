@@ -18,28 +18,28 @@ pipeline{
 		stage('Build') {
 
 			steps {
-				sh 'docker build -t sumamohan143/nodeapp_test:latest .'
+				sh 'sudo docker build -t sumamohan143/nodeapp_test:latest .'
 			}
 		}
 
 		stage('Login') {
 
 			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+				sh 'sudo echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			}
 		}
 
 		stage('Push') {
 
 			steps {
-				sh 'docker push sumamohan143/nodeapp_test:latest'
+				sh 'sudo docker push sumamohan143/nodeapp_test:latest'
 			}
 		}
 	}
 
 	post {
 		always {
-			sh 'docker logout'
+			sh 'sudo docker logout'
 		}
 	}
 
