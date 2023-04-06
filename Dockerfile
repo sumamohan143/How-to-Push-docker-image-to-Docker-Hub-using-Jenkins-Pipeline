@@ -2,8 +2,8 @@ FROM node:alpine
 
 #Install some dependencies
 
-#WORKDIR /usr/app
-COPY ./ ./
+#WORKDIR /usr/share/nodejs/npm-package-arg/
+COPY /usr/share/nodejs/npm-package-arg/package*.json ./
 RUN npm install
 
 # Set up a default command
