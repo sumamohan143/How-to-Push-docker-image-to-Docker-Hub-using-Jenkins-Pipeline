@@ -1,0 +1,28 @@
+pipeline {
+  agent any
+  
+  environment {
+    DOCKER_REGISTRY = "docker.io"
+    DOCKER_IMAGE_NAME = "my-docker-image"
+    DOCKER_HUB_USERNAME = credentials('docker-hub-username')
+    DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
+  }
+  
+  stages {
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t ${DOCKER_REGISTRY}/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${BUILD_NUMBER} .'
+      }
+    }
+    stage('Push Docker Image') {
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+            sh "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}"
+            sh "docker push ${DOCKER_REGISTRY}/${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
+          }
+        }
+      }
+    }
+  }
+}
